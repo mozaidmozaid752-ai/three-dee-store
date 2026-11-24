@@ -3,32 +3,71 @@ require('dotenv').config();
 const express=require('express');
 const helmet=require('helmet');
 const session=require('express-session');
-const SQLiteStore=require('connect-sqlite3')(session);
+const PgSession=require('connect-pg-simple')(session);
+const {Pool}=require('pg');
 const bcrypt=require('bcryptjs');
-const Database=require('better-sqlite3');
 const rateLimit=require('express-rate-limit');
 const path=require('path');
-const required=['ADMIN_PASSWORDS_JSON','SESSION_SECRET'];
+const required=['ADMIN_PASSWORDS_JSON','SESSION_SECRET','DATABASE_URL'];
 for(const key of required) if(!process.env[key]) throw new Error('Missing required environment variable: '+key);
 if(process.env.SESSION_SECRET.length<32) throw new Error('SESSION_SECRET must be at least 32 characters.');
 let passwords;
 try{passwords=JSON.parse(process.env.ADMIN_PASSWORDS_JSON)}catch{throw new Error('ADMIN_PASSWORDS_JSON must be a JSON array.')}
 if(!Array.isArray(passwords)||passwords.length!==2||passwords.some(p=>typeof p!=='string'||p.length<14)||new Set(passwords).size!==2) throw new Error('Configure exactly two different admin passwords of at least 14 characters.');
+const pool=new Pool({connectionString:process.env.DATABASE_URL,ssl:{rejectUnauthorized:false},max:5});
 const app=express();
-const db=new Database(process.env.DB_PATH||path.join(__dirname,'store.sqlite'));
-db.pragma('journal_mode=WAL');
-db.exec('CREATE TABLE IF NOT EXISTS admin_passwords(id INTEGER PRIMARY KEY,password_hash TEXT NOT NULL,created_at TEXT NOT NULL DEFAULT CURRENT_TIMESTAMP)');
-if(db.prepare('SELECT COUNT(*) n FROM admin_passwords').get().n===0){const insert=db.prepare('INSERT INTO admin_passwords(password_hash) VALUES(?)');db.transaction(()=>passwords.forEach(p=>insert.run(bcrypt.hashSync(p,12))))();}
 app.disable('x-powered-by');
 app.use(helmet({contentSecurityPolicy:false}));
-app.use(express.json({limit:'10kb'}));
-app.use(session({name:'three_dee_admin_sid',secret:process.env.SESSION_SECRET,resave:false,saveUninitialized:false,rolling:true,store:new SQLiteStore({db:'sessions.sqlite',dir:__dirname}),cookie:{httpOnly:true,secure:process.env.NODE_ENV==='production',sameSite:'strict',maxAge:28800000}}));
-const limiter=rateLimit({windowMs:900000,limit:8,standardHeaders:'draft-7',legacyHeaders:false,message:{error:'Invalid Password'}});
+app.use(express.json({limit:'1mb'}));
+app.use(session({store:new PgSession({pool,tableName:'admin_sessions',createTableIfMissing:true}),name:'three_dee_admin_sid',secret:process.env.SESSION_SECRET,resave:false,saveUninitialized:false,rolling:true,cookie:{httpOnly:true,secure:process.env.NODE_ENV==='production',sameSite:'strict',maxAge:28800000}}));
+const limiter=rateLimit({windowMs:900000,limit:8,standardHeaders:'draft-7',legacyHeaders:false,message:{error:'Too many attempts. Try again later.'}});
+const seed=[
+{id:101,name:"Sculptural Ceramic Form",cat:"Miniatures",price:899,stock:8,desc:"A statement-making sculptural accent inspired by organic forms.",img:"https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=900&q=85",tag:"Bestseller",rating:4.9,discount:15,material:"PLA",colors:["Ice Blue","White","Black"],sizes:["Small","Medium","Large"]},
+{id:102,name:"Minimalist Vase",cat:"Home Decor",price:699,stock:12,desc:"A timeless decorative vase with a clean silhouette.",img:"https://images.unsplash.com/photo-1578500494198-246f612d3b3d?auto=format&fit=crop&w=900&q=85",tag:"Popular",rating:4.8,discount:10,material:"PLA+",colors:["White","Sky Blue","Sand"],sizes:["Small","Medium"]},
+{id:103,name:"Abstract Desk Object",cat:"Desk Accessories",price:499,stock:15,desc:"A modern object for your workspace, desk or bookshelf.",img:"https://images.unsplash.com/photo-1490312278390-ab64016e0aa9?auto=format&fit=crop&w=900&q=85",tag:"New",rating:4.7,discount:0,material:"PLA",colors:["Blue","White","Black"],sizes:["Standard"]},
+{id:104,name:"Modern Art Sculpture",cat:"Miniatures",price:1199,stock:5,desc:"An expressive decorative form for contemporary rooms.",img:"https://images.unsplash.com/photo-1577083552431-6e5fd01aa342?auto=format&fit=crop&w=900&q=85",tag:"Limited",rating:4.9,discount:12,material:"Resin",colors:["Blue","White"],sizes:["Medium","Large"]},
+{id:105,name:"Decorative Planter",cat:"Home Decor",price:599,stock:9,desc:"A considered home for your favourite plant.",img:"https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=900&q=85",tag:"",rating:4.6,discount:0,material:"PLA",colors:["White","Sage","Blue"],sizes:["Small","Large"]},
+{id:106,name:"Creative Home Accent",cat:"Desk Accessories",price:349,stock:20,desc:"A simple design detail for everyday living.",img:"https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=900&q=85",tag:"",rating:4.5,discount:5,material:"PLA",colors:["Blue","Black","White"],sizes:["Standard"]},
+{id:107,name:"Geometric Mini Planter",cat:"Home Decor",price:449,stock:18,desc:"A compact geometric planter for desks and shelves.",img:"https://images.unsplash.com/photo-1485955900006-10f4d324d411?auto=format&fit=crop&w=900&q=85",tag:"New",rating:4.7,discount:0,material:"PLA",colors:["Blue","White","Sage"],sizes:["Small","Medium"]},
+{id:108,name:"Articulated Flex Figure",cat:"Toys & Figures",price:599,stock:14,desc:"A playful articulated figure for display and gifting.",img:"https://images.unsplash.com/photo-1558060370-d644479cb6f7?auto=format&fit=crop&w=900&q=85",tag:"Popular",rating:4.8,discount:8,material:"PLA+",colors:["Blue","Red","White"],sizes:["Standard"]},
+{id:109,name:"Cable Desk Organiser",cat:"Desk Accessories",price:299,stock:25,desc:"Keep cables and small desk essentials neatly in place.",img:"https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=900&q=85",tag:"Bestseller",rating:4.8,discount:0,material:"PLA",colors:["Blue","Black","White"],sizes:["Standard"]},
+{id:110,name:"Custom Name Keychain",cat:"Keychains",price:199,stock:30,desc:"A personalised name keychain.",img:"https://images.unsplash.com/photo-1513519245088-0e12902e5a38?auto=format&fit=crop&w=900&q=85",tag:"New",rating:4.6,discount:0,material:"PLA",colors:["Blue","Pink","White"],sizes:["Standard"]},
+{id:111,name:"Modular Utility Hook",cat:"Utility Products",price:249,stock:22,desc:"A compact utility hook for lightweight everyday items.",img:"https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=900&q=85",tag:"",rating:4.5,discount:0,material:"PLA",colors:["Blue","Black","White"],sizes:["Standard"]},
+{id:112,name:"Personalised Desk Sign",cat:"Customized Products",price:799,stock:10,desc:"A made-to-order desk sign personalised with your name.",img:"https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&w=900&q=85",tag:"Custom",rating:4.9,discount:0,material:"PLA+",colors:["Blue","White","Black"],sizes:["Small","Large"]}
+];
+async function init(){
+await pool.query(`CREATE TABLE IF NOT EXISTS admin_passwords(id SERIAL PRIMARY KEY,password_hash TEXT NOT NULL,created_at TIMESTAMPTZ DEFAULT NOW());
+CREATE TABLE IF NOT EXISTS products(id BIGINT PRIMARY KEY,data JSONB NOT NULL,updated_at TIMESTAMPTZ DEFAULT NOW());
+CREATE TABLE IF NOT EXISTS orders(id TEXT PRIMARY KEY,data JSONB NOT NULL,created_at TIMESTAMPTZ DEFAULT NOW(),updated_at TIMESTAMPTZ DEFAULT NOW());
+CREATE TABLE IF NOT EXISTS coupons(code TEXT PRIMARY KEY,discount INTEGER NOT NULL,active BOOLEAN DEFAULT TRUE,updated_at TIMESTAMPTZ DEFAULT NOW());
+CREATE TABLE IF NOT EXISTS custom_requests(id TEXT PRIMARY KEY,data JSONB NOT NULL,created_at TIMESTAMPTZ DEFAULT NOW(),status TEXT DEFAULT 'New');
+CREATE TABLE IF NOT EXISTS contact_messages(id TEXT PRIMARY KEY,data JSONB NOT NULL,created_at TIMESTAMPTZ DEFAULT NOW(),status TEXT DEFAULT 'New');`);
+const count=await pool.query('SELECT COUNT(*)::int AS n FROM admin_passwords');
+if(!count.rows[0].n){for(let i=0;i<2;i++)await pool.query('INSERT INTO admin_passwords(id,password_hash) VALUES($1,$2)',[i+1,bcrypt.hashSync(passwords[i],12)]);}
+const pc=await pool.query('SELECT COUNT(*)::int AS n FROM products');
+if(!pc.rows[0].n)for(const p of seed)await pool.query('INSERT INTO products(id,data) VALUES($1,$2)',[p.id,p]);
+await pool.query("INSERT INTO coupons(code,discount) VALUES('WELCOME10',10),('THREEDEE15',15) ON CONFLICT(code) DO NOTHING");
+}
 function requireAdmin(req,res,next){if(!req.session.adminId)return res.status(401).json({error:'Admin authentication required.'});next();}
-app.post('/api/admin/login',limiter,async(req,res)=>{const pass=typeof req.body.password==='string'?req.body.password:'';const rows=db.prepare('SELECT id,password_hash FROM admin_passwords ORDER BY id').all();let matched=null;for(const row of rows){if(await bcrypt.compare(pass,row.password_hash).catch(()=>false))matched=row;}if(!matched)return res.status(401).json({error:'Invalid Password'});req.session.regenerate(err=>{if(err)return res.status(500).json({error:'Could not start secure session.'});req.session.adminId=matched.id;req.session.save(e=>e?res.status(500).json({error:'Could not save secure session.'}):res.json({ok:true}));});});
-app.get('/api/admin/me',requireAdmin,(req,res)=>res.json({authenticated:true}));
+const asyncRoute=fn=>(req,res,next)=>Promise.resolve(fn(req,res,next)).catch(next);
+app.post('/api/admin/login',limiter,asyncRoute(async(req,res)=>{const pass=typeof req.body.password==='string'?req.body.password:'';const rows=await pool.query('SELECT id,password_hash FROM admin_passwords ORDER BY id');let matched=null;for(const row of rows.rows)if(await bcrypt.compare(pass,row.password_hash).catch(()=>false))matched=row;if(!matched)return res.status(401).json({error:'Invalid Password'});req.session.regenerate(err=>{if(err)return res.status(500).json({error:'Could not start secure session.'});req.session.adminId=matched.id;req.session.save(e=>e?res.status(500).json({error:'Could not save secure session.'}):res.json({ok:true,adminId:matched.id}));});}));
+app.get('/api/admin/me',requireAdmin,(req,res)=>res.json({authenticated:true,adminId:req.session.adminId}));
 app.post('/api/admin/logout',(req,res)=>req.session.destroy(err=>{if(err)return res.status(500).json({error:'Logout failed.'});res.clearCookie('three_dee_admin_sid',{httpOnly:true,sameSite:'strict',secure:process.env.NODE_ENV==='production'});res.json({ok:true});}));
-app.get('/api/admin/dashboard',requireAdmin,(req,res)=>res.json({ok:true}));
+app.get('/api/products',asyncRoute(async(req,res)=>{const r=await pool.query('SELECT data FROM products ORDER BY id');res.json(r.rows.map(x=>x.data));}));
+app.get('/api/admin/dashboard',requireAdmin,asyncRoute(async(req,res)=>{const [p,o,c,m]=await Promise.all([pool.query('SELECT COUNT(*)::int n FROM products'),pool.query('SELECT COUNT(*)::int n,COALESCE(SUM((data->>\'total\')::numeric),0) sales FROM orders'),pool.query("SELECT COUNT(*)::int n FROM orders WHERE data->>'status' NOT IN ('Delivered','Cancelled')"),pool.query('SELECT COUNT(*)::int n FROM custom_requests')]);res.json({products:p.rows[0].n,orders:o.rows[0].n,sales:Number(o.rows[0].sales),pending:c.rows[0].n,customRequests:m.rows[0].n});}));
+app.post('/api/admin/products',requireAdmin,asyncRoute(async(req,res)=>{const p=req.body||{};if(!p.name||!Number.isFinite(Number(p.price))||Number(p.price)<=0)return res.status(400).json({error:'Product name and valid price are required.'});const id=Number(p.id)||Date.now();const data={...p,id,price:Number(p.price),stock:Math.max(0,Number(p.stock)||0),discount:Math.max(0,Math.min(90,Number(p.discount)||0)),rating:Number(p.rating)||4.7};await pool.query('INSERT INTO products(id,data) VALUES($1,$2) ON CONFLICT(id) DO UPDATE SET data=EXCLUDED.data,updated_at=NOW()',[id,data]);res.json(data);}));
+app.delete('/api/admin/products/:id',requireAdmin,asyncRoute(async(req,res)=>{await pool.query('DELETE FROM products WHERE id=$1',[Number(req.params.id)]);res.json({ok:true});}));
+app.get('/api/admin/orders',requireAdmin,asyncRoute(async(req,res)=>{const r=await pool.query('SELECT data FROM orders ORDER BY created_at DESC');res.json(r.rows.map(x=>x.data));}));
+app.patch('/api/admin/orders/:id',requireAdmin,asyncRoute(async(req,res)=>{const r=await pool.query('SELECT data FROM orders WHERE id=$1',[req.params.id]);if(!r.rowCount)return res.status(404).json({error:'Order not found'});const o={...r.rows[0].data,status:String(req.body.status||r.rows[0].data.status),paymentStatus:String(req.body.paymentStatus||r.rows[0].data.paymentStatus)};o.history=[...(o.history||[])];if(!o.history.includes(o.status))o.history.push(o.status);await pool.query('UPDATE orders SET data=$2,updated_at=NOW() WHERE id=$1',[req.params.id,o]);res.json(o);}));
+app.get('/api/admin/custom-requests',requireAdmin,asyncRoute(async(req,res)=>{const r=await pool.query('SELECT id,data,status,created_at FROM custom_requests ORDER BY created_at DESC');res.json(r.rows);}));
+app.get('/api/admin/messages',requireAdmin,asyncRoute(async(req,res)=>{const r=await pool.query('SELECT id,data,status,created_at FROM contact_messages ORDER BY created_at DESC');res.json(r.rows);}));
+app.get('/api/admin/coupons',requireAdmin,asyncRoute(async(req,res)=>{const r=await pool.query('SELECT code,discount,active FROM coupons ORDER BY code');res.json(r.rows);}));
+app.post('/api/admin/coupons',requireAdmin,asyncRoute(async(req,res)=>{const code=String(req.body.code||'').trim().toUpperCase(),discount=Number(req.body.discount);if(!/^[A-Z0-9_-]{3,24}$/.test(code)||discount<1||discount>90)return res.status(400).json({error:'Enter a valid coupon and 1–90% discount.'});await pool.query('INSERT INTO coupons(code,discount) VALUES($1,$2) ON CONFLICT(code) DO UPDATE SET discount=$2,active=TRUE',[code,discount]);res.json({ok:true});}));
+app.get('/api/coupons',asyncRoute(async(req,res)=>{const r=await pool.query('SELECT code,discount FROM coupons WHERE active=TRUE');res.json(Object.fromEntries(r.rows.map(x=>[x.code,x.discount])));}));
+app.post('/api/orders',asyncRoute(async(req,res)=>{const b=req.body||{},items=Array.isArray(b.items)?b.items:[];if(!b.customer?.name||!b.customer?.phone||!b.customer?.address||!items.length)return res.status(400).json({error:'Complete customer and order details.'});const ids=items.map(x=>Number(x.id));const r=await pool.query('SELECT id,data FROM products WHERE id=ANY($1::bigint[])', [ids]);const map=new Map(r.rows.map(x=>[Number(x.id),x.data]));let subtotal=0,lines=[];for(const item of items){const p=map.get(Number(item.id)),qty=Math.max(1,Math.min(20,Number(item.qty)||1));if(!p||p.stock<qty)return res.status(409).json({error:'A product is out of stock or quantity changed.'});const price=Math.round(p.price*(1-(p.discount||0)/100));subtotal+=price*qty;lines.push({id:p.id,name:p.name,qty,price});}const code=String(b.coupon||'').toUpperCase();let discount=0;if(code){const c=await pool.query('SELECT discount FROM coupons WHERE code=$1 AND active=TRUE',[code]);if(c.rowCount)discount=Math.round(subtotal*c.rows[0].discount/100);}const shipping=subtotal===0||subtotal>=999?0:79,total=subtotal-discount+shipping,id='TD'+Date.now().toString().slice(-9);const order={id,date:new Date().toISOString(),customer:b.customer,items:lines,subtotal,discount,shipping,total,payment:'Cash on Delivery',paymentStatus:'Pending',status:'Order Placed',history:['Order Placed']};const client=await pool.connect();try{await client.query('BEGIN');for(const line of lines){const pr=map.get(Number(line.id));pr.stock-=line.qty;await client.query('UPDATE products SET data=$2,updated_at=NOW() WHERE id=$1',[line.id,pr]);}await client.query('INSERT INTO orders(id,data) VALUES($1,$2)',[id,order]);await client.query('COMMIT');}catch(e){await client.query('ROLLBACK');throw e;}finally{client.release();}res.json(order);}));
+app.post('/api/custom-requests',asyncRoute(async(req,res)=>{const data=req.body||{};if(!data.name||!data.phone||!data.details)return res.status(400).json({error:'Name, phone and request details are required.'});const id='CR'+Date.now().toString().slice(-9);await pool.query('INSERT INTO custom_requests(id,data) VALUES($1,$2)',[id,data]);res.json({ok:true,id});}));
+app.post('/api/contact',asyncRoute(async(req,res)=>{const data=req.body||{};if(!data.name||!data.email||!data.message)return res.status(400).json({error:'Complete all contact fields.'});const id='MSG'+Date.now().toString().slice(-9);await pool.query('INSERT INTO contact_messages(id,data) VALUES($1,$2)',[id,data]);res.json({ok:true,id});}));
 app.use(express.static(path.join(__dirname,'public'),{index:'index.html'}));
 app.get('*',(req,res)=>res.sendFile(path.join(__dirname,'public','index.html')));
-app.listen(Number(process.env.PORT||3000),()=>console.log('THREE.DEE server listening'));
+app.use((err,req,res,next)=>{console.error(err);res.status(500).json({error:'Server error. Please try again.'});});
+init().then(()=>app.listen(Number(process.env.PORT||3000),()=>console.log('THREE.DEE server listening with shared PostgreSQL database'))).catch(err=>{console.error('Database startup failed',err);process.exit(1);});
