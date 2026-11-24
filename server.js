@@ -17,6 +17,7 @@ if(!Array.isArray(passwords)||passwords.length!==2||passwords.some(p=>typeof p!=
 const pool=new Pool({connectionString:process.env.DATABASE_URL,ssl:{rejectUnauthorized:false},max:5});
 const app=express();
 app.disable('x-powered-by');
+app.set('trust proxy',1); // Trust Render's single reverse proxy so rate limiting can read client IPs safely.
 app.use(helmet({contentSecurityPolicy:false}));
 app.use(express.json({limit:'1mb'}));
 app.use(session({store:new PgSession({pool,tableName:'admin_sessions',createTableIfMissing:true}),name:'three_dee_admin_sid',secret:process.env.SESSION_SECRET,resave:false,saveUninitialized:false,rolling:true,cookie:{httpOnly:true,secure:process.env.NODE_ENV==='production',sameSite:'strict',maxAge:28800000}}));
