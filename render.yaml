@@ -16,6 +16,7 @@ services:
     branch: main
     buildCommand: npm install
     startCommand: npm start
+    healthCheckPath: /health
     autoDeployTrigger: commit
     envVars:
       - key: DATABASE_URL
