@@ -1,0 +1,24 @@
+databases:
+  - name: three-dee-store-db
+    plan: free
+    region: singapore
+    postgresMajorVersion: "16"
+    databaseName: three_dee_store_db
+    user: three_dee_store_db_user
+
+services:
+  - type: web
+    name: three-dee-store
+    runtime: node
+    plan: free
+    region: singapore
+    repo: https://github.com/mozaidmozaid752-ai/three-dee-store
+    branch: main
+    buildCommand: npm install
+    startCommand: npm start
+    autoDeployTrigger: commit
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: three-dee-store-db
+          property: connectionString
