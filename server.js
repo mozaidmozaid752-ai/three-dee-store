@@ -19,7 +19,7 @@ const app=express();
 app.disable('x-powered-by');
 app.set('trust proxy',1); // Trust Render's single reverse proxy so rate limiting can read client IPs safely.
 app.use(helmet({contentSecurityPolicy:false}));
-app.use(express.json({limit:'1mb'}));
+app.use(express.json({limit:'5mb'}));
 app.use(session({store:new PgSession({pool,tableName:'admin_sessions',createTableIfMissing:true}),name:'three_dee_admin_sid',secret:process.env.SESSION_SECRET,resave:false,saveUninitialized:false,rolling:true,cookie:{httpOnly:true,secure:process.env.NODE_ENV==='production',sameSite:'strict',maxAge:28800000}}));
 const limiter=rateLimit({windowMs:900000,limit:8,standardHeaders:'draft-7',legacyHeaders:false,message:{error:'Too many attempts. Try again later.'}});
 const seed=[
