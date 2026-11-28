@@ -112,6 +112,28 @@ body{background:#fffdfb!important;color:#3b2b21}
  .float{display:none}
 }
 
+
+/* Clickable four-category gallery and 10-photo detail view */
+.work-categories{grid-template-columns:repeat(4,1fr)}
+.category-card{display:block;width:100%;padding:0;border:0;background:transparent;text-align:left;cursor:pointer;font:inherit}
+.category-card label{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.category-card label span{font:500 10px 'DM Sans',sans-serif;opacity:.85}
+.category-card:focus-visible,.gallery-close:focus-visible{outline:3px solid #ead8c8;outline-offset:4px}
+.gallery-modal{display:none;position:fixed;inset:0;z-index:50;background:rgba(30,20,14,.82);padding:clamp(12px,3vw,34px);overflow-y:auto}
+.gallery-modal.open{display:block}
+.gallery-panel{max-width:1120px;margin:0 auto;background:#fffdfb;color:#3b2b21;padding:clamp(18px,3vw,34px);border-radius:8px;min-height:70vh}
+.gallery-top{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.gallery-top h2{font:800 clamp(25px,4vw,40px)/1.1 Manrope;letter-spacing:-.05em;margin:8px 0}
+.gallery-close{border:0;background:#ead8c8;color:#513a2a;width:42px;height:42px;border-radius:50%;font-size:28px;cursor:pointer}
+.gallery-note{color:#78685c;font-size:13px;margin:6px 0 22px}
+.gallery-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.gallery-item{margin:0;background:#f7eee6;overflow:hidden;border-radius:4px}
+.gallery-item img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.gallery-item figcaption{padding:9px 11px;font-size:12px;color:#624a38}
+body.gallery-open{overflow:hidden}
+@media(max-width:800px){.work-categories{grid-template-columns:repeat(2,1fr)}.gallery-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:460px){.work-categories{grid-template-columns:1fr 1fr;gap:9px}.category-card label{display:block}.category-card label span{display:block;margin-top:4px}.gallery-grid{grid-template-columns:1fr 1fr;gap:8px}.gallery-item figcaption{font-size:10px;padding:7px}}
+
 </style>
 </head>
 <body>
@@ -125,9 +147,45 @@ body{background:#fffdfb!important;color:#3b2b21}
 <article class="service"><img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=700&q=80" alt="Marble finish interior"><div><small>03 / FINISHES</small><h3>PVC Marble Sheets</h3><p>Elegant marble-inspired looks for your interiors.</p></div></article>
 <article class="service"><img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=700&q=80" alt="Modern TV wall unit"><div><small>04 / CUSTOM</small><h3>TV & Feature Panels</h3><p>Custom feature walls that bring the room together.</p></div></article>
 </div></div></section>
-<section class="section dark" id="work"><div class="wrap"><div class="head"><div><div class="eyebrow">OUR PROJECTS</div><h2>Our work, our<br>designs.</h2></div><p>Explore our interior design project gallery, featuring wall panels, ceiling concepts and statement finishes.</p></div><div class="projects"><div class="project"><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=80" alt="Contemporary living room"><label>Contemporary Living</label></div><div class="project"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=700&q=80" alt="Modern ceiling design"><label>Ceiling Concepts</label></div><div class="project"><img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=700&q=80" alt="Interior wall finish"><label>Statement Walls</label></div></div><p style="font-size:11px;color:#b9c7bd;margin-top:18px">*Demo gallery images shown for layout preview. Replace with actual completed project photos before sharing as a final business portfolio.</p></div></section>
+<section class="section dark" id="work"><div class="wrap"><div class="head"><div><div class="eyebrow">OUR PROJECTS</div><h2>Our work, our<br>designs.</h2></div><p>Choose a room or space to explore 10 design photos in that category.</p></div><div class="projects work-categories">
+<button class="project category-card" type="button" data-category="bedroom"><img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=900&q=80" alt="Bedroom PVC interior ideas"><label>Bedroom <span>View 10 designs ↗</span></label></button>
+<button class="project category-card" type="button" data-category="living"><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=80" alt="Living room PVC interior ideas"><label>Living Room <span>View 10 designs ↗</span></label></button>
+<button class="project category-card" type="button" data-category="outside"><img src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?auto=format&fit=crop&w=900&q=80" alt="Outside exterior design ideas"><label>Outside <span>View 10 designs ↗</span></label></button>
+<button class="project category-card" type="button" data-category="kitchen"><img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=900&q=80" alt="Kitchen PVC interior ideas"><label>Kitchen <span>View 10 designs ↗</span></label></button>
+</div>
+<div class="gallery-modal" id="designGallery" aria-hidden="true"><div class="gallery-panel"><div class="gallery-top"><div><div class="eyebrow">DESIGN INSPIRATION</div><h2 id="galleryTitle">Bedroom PVC Designs</h2></div><button class="gallery-close" id="galleryClose" type="button" aria-label="Close gallery">×</button></div><p class="gallery-note">10 design reference photos. Final PVC patterns and finishes can be discussed for your space.</p><div class="gallery-grid" id="galleryGrid"></div></div></div><p style="font-size:11px;color:#b9c7bd;margin-top:18px">*These are illustrative design-reference photos, not verified completed client projects.</p></div></section>
 <section class="section" id="about"><div class="wrap why"><img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1000&q=85" alt="Warm modern home interior"><div><div class="eyebrow">THE PVC INTERIOR DIFFERENCE</div><h2 style="font:800 clamp(32px,4vw,48px)/1.06 Manrope;letter-spacing:-.05em;margin:12px 0">A thoughtful finish makes all the difference.</h2><p style="color:var(--muted);line-height:1.8;font-size:14px">The right surface, pattern and installation can completely change how a room feels. Explore ideas, discuss your space and find a finish that feels right for your home.</p><div class="points"><div class="point"><b>Modern designs</b><p>Contemporary looks for today's homes.</p></div><div class="point"><b>Easy maintenance</b><p>Practical finishes for everyday living.</p></div><div class="point"><b>Custom solutions</b><p>Design ideas shaped around your space.</p></div><div class="point"><b>Local enquiries</b><p>Connect with the team in Lakhimpur.</p></div></div></div></div></section>
 <section class="cta" id="contact"><div class="wrap"><div class="eyebrow">LET'S PLAN YOUR SPACE</div><h2>Ready to give your interiors a fresh new look?</h2><p>Share your requirement and start a conversation about your PVC interior project.</p><a class="btn" href="https://www.instagram.com/pvcinterior_lmp/" target="_blank" rel="noopener">MESSAGE ON INSTAGRAM ↗</a></div></section>
 </main>
 <footer class="footer"><div class="wrap foot"><div><div class="brand">PVC<span style="color:#c5d7a6">.</span>INTERIOR</div><p>Modern PVC interior solutions · Lakhimpur, Uttar Pradesh</p></div><div><p>Instagram: @pvcinterior_lmp</p><p>© 2026 PVC Interior. Demo website.</p></div></div></footer>
+
+<script>
+(()=>{
+const photos={
+ bedroom:[
+ "photo-1616486338812-3dadae4b4ace","photo-1600210492486-724fe5c67fb0","photo-1600607687939-ce8a6c25118c","photo-1600607687920-4e2a09cf159d","photo-1600566753086-00f18fb6b3ea","photo-1600566753190-17f0baa2a6c3","photo-1618221195710-dd6b41faaea6","photo-1615874694520-474822394e73","photo-1616486029423-aaa4789e8c9a","photo-1617104678098-de229db51175"
+ ],
+ living:[
+ "photo-1600210492486-724fe5c67fb0","photo-1600607687939-ce8a6c25118c","photo-1600566753190-17f0baa2a6c3","photo-1600607687920-4e2a09cf159d","photo-1600566753086-00f18fb6b3ea","photo-1616486338812-3dadae4b4ace","photo-1600607687920-4e2a09cf159d","photo-1600210492486-724fe5c67fb0","photo-1618221195710-dd6b41faaea6","photo-1616486029423-aaa4789e8c9a"
+ ],
+ outside:[
+ "photo-1600607687939-ce8a6c25118c","photo-1600566753190-17f0baa2a6c3","photo-1600607687920-4e2a09cf159d","photo-1600566753086-00f18fb6b3ea","photo-1600210492486-724fe5c67fb0","photo-1616486338812-3dadae4b4ace","photo-1600607687939-ce8a6c25118c","photo-1618221195710-dd6b41faaea6","photo-1616486029423-aaa4789e8c9a","photo-1617104678098-de229db51175"
+ ],
+ kitchen:[
+ "photo-1600607687920-4e2a09cf159d","photo-1600566753086-00f18fb6b3ea","photo-1600607687939-ce8a6c25118c","photo-1600566753190-17f0baa2a6c3","photo-1600210492486-724fe5c67fb0","photo-1616486338812-3dadae4b4ace","photo-1617104678098-de229db51175","photo-1618221195710-dd6b41faaea6","photo-1616486029423-aaa4789e8c9a","photo-1600607687920-4e2a09cf159d"
+ ]
+};
+const names={bedroom:"Bedroom",living:"Living Room",outside:"Outside",kitchen:"Kitchen"};
+const modal=document.getElementById("designGallery"),title=document.getElementById("galleryTitle"),grid=document.getElementById("galleryGrid");
+function close(){modal.classList.remove("open");modal.setAttribute("aria-hidden","true");document.body.classList.remove("gallery-open")}
+document.querySelectorAll("[data-category]").forEach(btn=>btn.addEventListener("click",()=>{
+ const key=btn.dataset.category;title.textContent=names[key]+" PVC Designs";grid.innerHTML="";
+ photos[key].forEach((id,i)=>{const fig=document.createElement("figure");fig.className="gallery-item";const img=document.createElement("img");img.loading="lazy";img.alt=names[key]+" interior design reference "+(i+1);img.src="https://images.unsplash.com/"+id+"?auto=format&fit=crop&w=900&q=80";const cap=document.createElement("figcaption");cap.textContent=names[key]+" Design "+String(i+1).padStart(2,"0");fig.append(img,cap);grid.append(fig)});
+ modal.classList.add("open");modal.setAttribute("aria-hidden","false");document.body.classList.add("gallery-open");document.getElementById("galleryClose").focus();
+}));
+document.getElementById("galleryClose").addEventListener("click",close);
+modal.addEventListener("click",e=>{if(e.target===modal)close()});
+document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modal.classList.contains("open"))close()});
+})();
+</script>
 </body></html>
