@@ -134,6 +134,14 @@ body.gallery-open{overflow:hidden}
 @media(max-width:800px){.work-categories{grid-template-columns:repeat(2,1fr)}.gallery-grid{grid-template-columns:repeat(2,1fr)}.gallery-item img{min-height:190px}}
 @media(max-width:460px){.work-categories{grid-template-columns:1fr 1fr;gap:9px}.category-card label{display:block}.category-card label span{display:block;margin-top:4px}.gallery-grid{grid-template-columns:1fr;gap:12px}.gallery-item img{min-height:220px}.gallery-item figcaption{font-size:11px;padding:8px}}
 
+
+/* Simple Our Work PVC image gallery */
+.work-gallery{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+.work-photo{margin:0;overflow:hidden;background:#fff;border-radius:4px;aspect-ratio:16/9}
+.work-photo img{display:block;width:100%;height:100%;object-fit:cover;transition:transform .35s}
+.work-photo:hover img{transform:scale(1.035)}
+@media(max-width:800px){.work-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
+@media(max-width:460px){.work-gallery{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}}
 </style>
 </head>
 <body>
@@ -147,67 +155,30 @@ body.gallery-open{overflow:hidden}
 <article class="service"><img src="https://images.unsplash.com/photo-1600607687920-4e2a09cf159d?auto=format&fit=crop&w=700&q=80" alt="Marble finish interior"><div><small>03 / FINISHES</small><h3>PVC Marble Sheets</h3><p>Elegant marble-inspired looks for your interiors.</p></div></article>
 <article class="service"><img src="https://images.unsplash.com/photo-1600566753086-00f18fb6b3ea?auto=format&fit=crop&w=700&q=80" alt="Modern TV wall unit"><div><small>04 / CUSTOM</small><h3>TV & Feature Panels</h3><p>Custom feature walls that bring the room together.</p></div></article>
 </div></div></section>
-<section class="section dark" id="work"><div class="wrap"><div class="head"><div><div class="eyebrow">OUR PROJECTS</div><h2>Our work, our<br>designs.</h2></div><p>Choose a room or space to explore 10 design photos in that category.</p></div><div class="projects work-categories">
-<button class="project category-card" type="button" data-category="bedroom"><img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=1200&q=85" alt="Bedroom PVC interior ideas"><label>Bedroom <span>View 10 designs ↗</span></label></button>
-<button class="project category-card" type="button" data-category="living"><img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=1200&q=85" alt="Living room PVC interior ideas"><label>Living Room <span>View 10 designs ↗</span></label></button>
-<button class="project category-card" type="button" data-category="outside"><img src="https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=85" alt="Outside exterior design ideas"><label>Outside <span>View 10 designs ↗</span></label></button>
-<button class="project category-card" type="button" data-category="kitchen"><img src="https://images.unsplash.com/photo-1556911220-bff31c812dba?auto=format&fit=crop&w=1200&q=85" alt="Kitchen PVC interior ideas"><label>Kitchen <span>View 10 designs ↗</span></label></button>
+<section class="section dark" id="work"><div class="wrap">
+<div class="head"><div><div class="eyebrow">OUR DESIGNS</div><h2>Our Work</h2></div><p>PVC wall panels, ceiling and interior design ideas.</p></div>
+<div class="work-gallery">
+<figure class="work-photo"><img loading="lazy" src="https://www.ecerimg.com/nimg/47/71/cdd18ed292fb4e2dee5886ebf3f2-600x600-1/interior_waterproof_wood_grain_laminated_pvc_wpc_wall_panels_designs_decor.jpg" alt="PVC wall panel interior design"></figure>
+<figure class="work-photo"><img loading="lazy" src="https://walldecorcenter.com/cdn/shop/articles/37.4.png?v=1758147547" alt="PVC marble wall panel interior design"></figure>
+<figure class="work-photo"><img loading="lazy" src="https://i.ebayimg.com/images/g/mpcAAOSwUvpj7Ihn/s-l1200.jpg" alt="3D PVC wall panels"></figure>
+<figure class="work-photo"><img loading="lazy" src="https://down-id.img.susercontent.com/file/sg-11134201-825zn-mjz134ac4bnn82" alt="Wood finish PVC wall panel room"></figure>
+<figure class="work-photo"><img loading="lazy" src="https://ilrorwxhmjorlo5p-static.micyjz.com/cloud/ljBpiKioljSRnlplkmomip/1.jpg" alt="PVC wall and ceiling panel interior"></figure>
+<figure class="work-photo"><img loading="lazy" src="https://s.alicdn.com/@sc04/kf/Hf4619812634a480a8c054b9080305165B/229939002/Hf4619812634a480a8c054b9080305165B.jpg?quality=close" alt="PVC marble sheet wall decoration"></figure>
+<figure class="work-photo"><img loading="lazy" src="https://image.made-in-china.com/2f0j00sIicbfRqhtoO/100-Waterproof-Building-Material-PVC-Plastic-Foam-Board-PVC-Wall-Panel-House-for-Ceiling.webp" alt="PVC ceiling and wall panel designs"></figure>
+<figure class="work-photo"><img loading="lazy" src="https://i.pinimg.com/originals/33/b5/0e/33b50ed0cb935e6ef9d375d4c282336d.jpg" alt="PVC panel hall interior"></figure>
+<figure class="work-photo"><img loading="lazy" src="https://assets.zyrosite.com/cdn-cgi/image/format%3Dauto%2Cw%3D768%2Ch%3D768%2Cfit%3Dcrop/OppcOb4BQczY0Ezq/pvc-panel-designs-indirapuram-modern-wall-panels-19DorTYIHwQRlF3w.webp" alt="PVC panel bedroom interior"></figure>
+<figure class="work-photo"><img loading="lazy" src="https://5.imimg.com/data5/SELLER/Default/2023/7/321620147/JJ/HD/JW/134314188/pvc-false-ceiling-1000x1000.jpg" alt="PVC false ceiling interior"></figure>
+<figure class="work-photo"><img loading="lazy" src="https://i0.wp.com/civiconcepts.com/wp-content/uploads/2021/08/PVC-False-Ceiling.jpg?resize=720%2C540&ssl=1" alt="PVC false ceiling design"></figure>
+<figure class="work-photo"><img loading="lazy" src="https://realplast.in/fmcg_upload/environment/190123115226DSC02106_7_8_Enhancer.jpg" alt="PVC ceiling living room interior"></figure>
+<figure class="work-photo"><img loading="lazy" src="https://www.decointeriors.in/images/portfolio/false_ceiling/pvc-false-ceiling-9.jpg" alt="PVC false ceiling with wooden panels"></figure>
+<figure class="work-photo"><img loading="lazy" src="https://cpimg.tistatic.com/8351878/b/4/pvc-panel.jpeg" alt="PVC ceiling panel design"></figure>
 </div>
-<div class="gallery-modal" id="designGallery" aria-hidden="true"><div class="gallery-panel"><div class="gallery-top"><div><div class="eyebrow">DESIGN INSPIRATION</div><h2 id="galleryTitle">Bedroom PVC Designs</h2></div><button class="gallery-close" id="galleryClose" type="button" aria-label="Close gallery">×</button></div><p class="gallery-note">10 design reference photos. Final PVC patterns and finishes can be discussed for your space.</p><div class="gallery-grid" id="galleryGrid"></div></div></div><p style="font-size:11px;color:#b9c7bd;margin-top:18px">*These are illustrative design-reference photos, not verified completed client projects.</p></div></section>
+<p style="font-size:11px;color:#ead8c8;margin-top:18px">*Design reference images for inspiration.</p>
+</div></section>
 <section class="section" id="about"><div class="wrap why"><img src="https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?auto=format&fit=crop&w=1000&q=85" alt="Warm modern home interior"><div><div class="eyebrow">THE PVC INTERIOR DIFFERENCE</div><h2 style="font:800 clamp(32px,4vw,48px)/1.06 Manrope;letter-spacing:-.05em;margin:12px 0">A thoughtful finish makes all the difference.</h2><p style="color:var(--muted);line-height:1.8;font-size:14px">The right surface, pattern and installation can completely change how a room feels. Explore ideas, discuss your space and find a finish that feels right for your home.</p><div class="points"><div class="point"><b>Modern designs</b><p>Contemporary looks for today's homes.</p></div><div class="point"><b>Easy maintenance</b><p>Practical finishes for everyday living.</p></div><div class="point"><b>Custom solutions</b><p>Design ideas shaped around your space.</p></div><div class="point"><b>Local enquiries</b><p>Connect with the team in Lakhimpur.</p></div></div></div></div></section>
 <section class="cta" id="contact"><div class="wrap"><div class="eyebrow">LET'S PLAN YOUR SPACE</div><h2>Ready to give your interiors a fresh new look?</h2><p>Share your requirement and start a conversation about your PVC interior project.</p><a class="btn" href="https://www.instagram.com/pvcinterior_lmp/" target="_blank" rel="noopener">MESSAGE ON INSTAGRAM ↗</a></div></section>
 </main>
 <footer class="footer"><div class="wrap foot"><div><div class="brand">PVC<span style="color:#c5d7a6">.</span>INTERIOR</div><p>Modern PVC interior solutions · Lakhimpur, Uttar Pradesh</p></div><div><p>Instagram: @pvcinterior_lmp</p><p>© 2026 PVC Interior. Demo website.</p></div></div></footer>
 
-<script>
-(()=>{
-const photos={
- bedroom:[
- "photo-1616486338812-3dadae4b4ace","photo-1616486029423-aaa4789e8c9a","photo-1615874694520-474822394e73","photo-1618221195710-dd6b41faaea6","photo-1600210492486-724fe5c67fb0",
- "photo-1600607687939-ce8a6c25118c","photo-1600566753086-00f18fb6b3ea","photo-1600566753190-17f0baa2a6c3","photo-1600607687920-4e2a09cf159d","photo-1600607687644-c7171b42498f"
- ],
- living:[
- "photo-1600210492486-724fe5c67fb0","photo-1600607687939-ce8a6c25118c","photo-1600566753190-17f0baa2a6c3","photo-1600566753086-00f18fb6b3ea","photo-1600607687920-4e2a09cf159d",
- "photo-1616486338812-3dadae4b4ace","photo-1600607687644-c7171b42498f","photo-1600607687939-ce8a6c25118c","photo-1600210492486-724fe5c67fb0","photo-1600566753190-17f0baa2a6c3"
- ],
- outside:[
- "photo-1600585154340-be6161a56a0c","photo-1600607687939-ce8a6c25118c","photo-1600566753086-00f18fb6b3ea","photo-1600585154526-990dced4db0d","photo-1600566753190-17f0baa2a6c3",
- "photo-1600607687920-4e2a09cf159d","photo-1600585154340-be6161a56a0c","photo-1600566753086-00f18fb6b3ea","photo-1600607687939-ce8a6c25118c","photo-1600585154526-990dced4db0d"
- ],
- kitchen:[
- "photo-1556911220-bff31c812dba","photo-1556912172-45b7abe8b7e1","photo-1556911261-6bd341186b2f","photo-1556911220-e15b29be8c8f","photo-1600607687920-4e2a09cf159d",
- "photo-1556911220-bff31c812dba","photo-1556912172-45b7abe8b7e1","photo-1556911261-6bd341186b2f","photo-1556911220-e15b29be8c8f","photo-1600607687920-4e2a09cf159d"
- ]
-};
-const names={bedroom:"Bedroom",living:"Living Room",outside:"Outside",kitchen:"Kitchen"};
-const fallback={
- bedroom:"photo-1616486338812-3dadae4b4ace",
- living:"photo-1600210492486-724fe5c67fb0",
- outside:"photo-1600585154340-be6161a56a0c",
- kitchen:"photo-1556911220-bff31c812dba"
-};
-const imageUrl=id=>"https://images.unsplash.com/"+id+"?auto=format&fit=crop&w=1200&q=85";
-const modal=document.getElementById("designGallery"),title=document.getElementById("galleryTitle"),grid=document.getElementById("galleryGrid");
-function close(){modal.classList.remove("open");modal.setAttribute("aria-hidden","true");document.body.classList.remove("gallery-open")}
-document.querySelectorAll("[data-category]").forEach(btn=>{
- const key=btn.dataset.category;
- const cover=btn.querySelector("img");
- if(cover){cover.src=imageUrl(fallback[key]);cover.onerror=()=>{cover.onerror=null;cover.src=imageUrl("photo-1600210492486-724fe5c67fb0")}}
- btn.addEventListener("click",()=>{
-  title.textContent=names[key]+" PVC Designs";grid.innerHTML="";
-  photos[key].forEach((id,i)=>{
-   const fig=document.createElement("figure");fig.className="gallery-item";
-   const img=document.createElement("img");img.loading="lazy";img.alt=names[key]+" interior design reference "+(i+1);img.src=imageUrl(id);
-   img.onerror=()=>{img.onerror=null;img.src=imageUrl(fallback[key])};
-   const cap=document.createElement("figcaption");cap.textContent=names[key]+" Design "+String(i+1).padStart(2,"0");
-   fig.append(img,cap);grid.append(fig)
-  });
-  modal.classList.add("open");modal.setAttribute("aria-hidden","false");document.body.classList.add("gallery-open");document.getElementById("galleryClose").focus();
- });
-});
-document.getElementById("galleryClose").addEventListener("click",close);
-modal.addEventListener("click",e=>{if(e.target===modal)close()});
-document.addEventListener("keydown",e=>{if(e.key==="Escape"&&modal.classList.contains("open"))close()});
-})();
-</script>
+
 </body></html>
