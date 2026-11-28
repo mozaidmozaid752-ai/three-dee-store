@@ -67,6 +67,51 @@ body{background:#faf8f5;color:var(--ink)}
   .heroPic{height:100%;aspect-ratio:auto}
   .float{display:none}
 }
+
+/* FINAL OVERRIDE — warm beige, light brown and white; 16:9 media on desktop and mobile */
+:root{--ink:#3b2b21;--muted:#78685c;--cream:#fffdfb;--green:#8b6246;--lime:#ead8c8;--white:#fff}
+body{background:#fffdfb!important;color:#3b2b21}
+.top,.dark{background:#765238!important;color:#fff}
+.nav{background:#fff!important;border-bottom:1px solid #eadfd5}
+.brand span,.hero h1 em{color:#ad805e}
+.btn{background:#8b6246!important;color:#fff!important}
+.btn.light{background:#ead8c8!important;color:#513a2a!important}
+.hero{background:linear-gradient(110deg,#fffdfb 0%,#f7eee6 100%)!important;padding:0!important}
+.section{background:#fffdfb}
+.section.dark{background:#765238!important}
+.cta{background:#ead8c8!important}
+.footer{background:#493326!important}
+.service{background:#fff;border:1px solid #f0e7df}
+.service img,.project img,.why>img{width:100%;aspect-ratio:16/9;height:auto;object-fit:cover}
+.project{height:auto!important;aspect-ratio:16/9;overflow:hidden}
+.project img{height:100%;display:block}
+.heroGrid{width:min(100%,1920px);max-width:1920px;aspect-ratio:16/9;margin:0 auto;padding:clamp(18px,4vw,64px);display:grid;grid-template-columns:1fr 1.05fr;gap:clamp(14px,3vw,44px);align-items:center}
+.heroPic{width:100%;height:100%;min-height:0;aspect-ratio:auto;overflow:hidden}
+.heroPic img{width:100%;height:100%;object-fit:cover}
+@media(max-width:800px){
+ .heroGrid{width:100%;aspect-ratio:16/9;min-height:0;grid-template-columns:1fr 1fr;gap:10px;padding:12px}
+ .heroGrid>div:first-child{min-width:0}
+ .hero .eyebrow{font-size:clamp(6px,1.35vw,10px);letter-spacing:.09em}
+ .hero h1{font-size:clamp(17px,4.6vw,36px);line-height:1.03;margin:7px 0}
+ .hero p{font-size:clamp(7px,1.55vw,12px);line-height:1.35;margin:0}
+ .hero .actions{display:flex;gap:5px;margin-top:8px}
+ .hero .btn{font-size:clamp(6px,1.15vw,9px);padding:6px 8px}
+ .heroPic{height:100%;aspect-ratio:auto}
+ .heroPic img{height:100%;aspect-ratio:auto;object-fit:cover}
+ .service img{aspect-ratio:16/9;height:auto}
+ .project{aspect-ratio:16/9;height:auto!important}
+ .project img{height:100%;aspect-ratio:auto}
+}
+@media(max-width:460px){
+ .heroGrid{aspect-ratio:16/9;padding:9px;gap:7px}
+ .hero h1{font-size:clamp(16px,5vw,22px);margin:5px 0}
+ .hero p{font-size:7px;line-height:1.3}
+ .hero .actions{margin-top:6px}
+ .hero .btn{font-size:6px;padding:5px 6px}
+ .hero .actions .btn.light{display:none}
+ .float{display:none}
+}
+
 </style>
 </head>
 <body>
