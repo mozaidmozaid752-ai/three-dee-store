@@ -10,7 +10,37 @@
 :root{--ink:#18221f;--muted:#69736d;--cream:#f5f3ed;--green:#244d3d;--lime:#c5d7a6;--white:#fff}*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font-family:'DM Sans',sans-serif;color:var(--ink);background:var(--cream)}a{color:inherit;text-decoration:none}.wrap{width:min(1160px,calc(100% - 40px));margin:auto}.top{background:#193b30;color:#eaf0e8;padding:10px 0;font-size:12px;letter-spacing:.04em}.top .wrap{display:flex;justify-content:space-between;gap:12px}.nav{background:#f9f8f3;position:sticky;top:0;z-index:10;border-bottom:1px solid #e7e5dc}.navin{height:76px;display:flex;align-items:center;justify-content:space-between}.brand{font:800 22px Manrope;letter-spacing:-.06em}.brand span{color:#78936b}.links{display:flex;gap:28px;font-size:13px;color:#4d5851}.btn{display:inline-flex;align-items:center;justify-content:center;background:var(--green);color:white;padding:14px 21px;border-radius:3px;font-weight:700;font-size:12px;letter-spacing:.04em}.btn.light{background:var(--lime);color:#20392e}.hero{padding:58px 0 70px;background:linear-gradient(100deg,#f5f3ed 0%,#f5f3ed 46%,#e8e9df 100%)}.heroGrid{display:grid;grid-template-columns:1fr 1.08fr;gap:48px;align-items:center}.eyebrow{font-size:11px;letter-spacing:.2em;text-transform:uppercase;color:#70866f;font-weight:700}.hero h1{font:800 clamp(42px,5.8vw,72px)/1.02 Manrope;letter-spacing:-.065em;margin:18px 0}.hero h1 em{font-style:normal;color:#648260}.hero p{color:var(--muted);line-height:1.8;max-width:450px;font-size:15px}.actions{display:flex;gap:12px;margin-top:27px;flex-wrap:wrap}.heroPic{height:490px;position:relative;overflow:hidden;border-radius:4px}.heroPic img{width:100%;height:100%;object-fit:cover}.float{position:absolute;bottom:20px;left:20px;background:#fff;padding:17px 20px;max-width:220px;font-size:12px;line-height:1.5}.float b{display:block;font:700 18px Manrope}.section{padding:82px 0}.head{display:flex;justify-content:space-between;align-items:end;gap:24px;margin-bottom:34px}.head h2{font:800 clamp(30px,4vw,45px)/1.08 Manrope;letter-spacing:-.05em;margin:10px 0 0}.head p{max-width:390px;color:var(--muted);font-size:14px;line-height:1.7}.services{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}.service{background:#fff;padding:0 0 22px}.service img{width:100%;height:190px;object-fit:cover}.service div{padding:17px 18px 0}.service small{color:#819078;font-size:10px;letter-spacing:.14em;text-transform:uppercase}.service h3{font:700 18px Manrope;margin:8px 0}.service p{color:var(--muted);font-size:12px;line-height:1.6;margin:0}.dark{background:#203e33;color:#fff}.dark .eyebrow{color:#c5d7a6}.dark .head p{color:#c2cec5}.projects{display:grid;grid-template-columns:1.25fr 1fr 1fr;gap:14px}.project{height:330px;position:relative;overflow:hidden}.project img{width:100%;height:100%;object-fit:cover;transition:transform .5s}.project:hover img{transform:scale(1.04)}.project label{position:absolute;bottom:0;left:0;right:0;padding:35px 18px 17px;color:white;background:linear-gradient(transparent,rgba(0,0,0,.7));font:700 16px Manrope}.why{display:grid;grid-template-columns:1fr 1fr;gap:50px;align-items:center}.why img{width:100%;height:390px;object-fit:cover}.points{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:28px}.point{border-top:1px solid #d9ddd3;padding-top:14px}.point b{font:700 14px Manrope}.point p{font-size:12px;color:var(--muted);line-height:1.6}.cta{padding:62px 0;background:#dfe6d5;text-align:center}.cta h2{font:800 clamp(30px,4vw,46px) Manrope;letter-spacing:-.05em;margin:10px auto;max-width:700px}.cta p{color:#58665b;margin:12px auto 24px}.footer{background:#172f27;color:#eaf0e8;padding:42px 0}.foot{display:flex;justify-content:space-between;gap:25px;align-items:center}.footer p{font-size:12px;color:#b9c7bd}.mobile{display:none}
 @media(max-width:800px){.links{display:none}.mobile{display:block}.heroGrid,.why{grid-template-columns:1fr}.hero{padding:38px 0 48px}.heroPic{height:340px}.services{grid-template-columns:1fr 1fr}.projects{grid-template-columns:1fr 1fr}.project{height:240px}.head{display:block}.head p{margin-top:12px}.section{padding:60px 0}.foot{display:block}.top .wrap{justify-content:center}.top .wrap span:last-child{display:none}}
 @media(max-width:460px){.wrap{width:calc(100% - 28px)}.services{gap:9px}.service img{height:135px}.service div{padding:12px}.service h3{font-size:15px}.projects{grid-template-columns:1fr}.project{height:260px}.points{gap:12px}.navin{height:65px}}
-</style>
+
+/* Updated visual direction: warm light-brown + white, widescreen 16:9 imagery */
+:root{--ink:#342820;--muted:#7b6d62;--cream:#faf8f5;--green:#8b6548;--lime:#ead9c8;--white:#fff}
+body{background:#faf8f5;color:var(--ink)}
+.top{background:#6f4d37;color:#fff}
+.nav{background:#fff;border-bottom-color:#eee5dc}
+.brand span{color:#b58b68}
+.links{color:#6f6258}
+.btn{background:#8b6548;color:#fff}
+.btn.light{background:#ead9c8;color:#553b2b}
+.hero{background:linear-gradient(100deg,#faf8f5 0%,#f7f1eb 52%,#efe3d7 100%)}
+.eyebrow,.service small{color:#a47a58}
+.hero h1 em{color:#a47753}
+.heroPic{height:auto;aspect-ratio:16/9}
+.float{background:#fffaf5;color:#342820}
+.service{background:#fff}
+.service img{height:auto;aspect-ratio:16/9}
+.dark{background:#6f4d37;color:#fff}
+.dark .eyebrow{color:#ead9c8}
+.dark .head p{color:#f0e5dc}
+.project{height:auto;aspect-ratio:16/9}
+.project img{height:100%;aspect-ratio:16/9}
+.why img{height:auto;aspect-ratio:16/9}
+.point{border-top-color:#e7d9cc}
+.cta{background:#ead9c8}
+.cta .eyebrow{color:#8b6548}
+.cta p{color:#6f5a49}
+.footer{background:#493326;color:#fff}
+.footer p{color:#e4d5c9}
+@media(max-width:800px){.heroPic{height:auto;aspect-ratio:16/9}.project{height:auto;aspect-ratio:16/9}}
+\n</style>
 </head>
 <body>
 <div class="top"><div class="wrap"><span>CRAFTING BEAUTIFUL SPACES WITH PVC</span><span>LAKHIMPUR, UTTAR PRADESH · @PVCINTERIOR_LMP</span></div></div>
